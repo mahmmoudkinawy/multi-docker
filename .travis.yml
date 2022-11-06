@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before-install:
+  - docker build -t kino2001/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run kino2001/react-test npm test -- --coverage
+
+after-success:
+  - docker build -t kino2001/multi-client ./client
+  - docker build -t kino2001/multi-server ./server
+  - docker build -t kino2001/multi-nginx ./nginx
+  - docker build -t kino2001/multi-worker ./worker
+  # Log in to the docker CLI from travis CI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push to docker hub
+  - docker push kino2001/multi-client
+  - docker push kino2001/multi-server
+  - docker push kino2001/multi-nginx
+  - docker push kino2001/multi-worker
