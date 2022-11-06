@@ -10,8 +10,8 @@ script:
 
 after-success:
   - docker build -t kino2001/multi-client ./client
-  - docker build -t kino2001/multi-server ./server
   - docker build -t kino2001/multi-nginx ./nginx
+  - docker build -t kino2001/multi-server ./server
   - docker build -t kino2001/multi-worker ./worker
   # Log in to the docker CLI from travis CI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
